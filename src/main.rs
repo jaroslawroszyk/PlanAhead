@@ -5,6 +5,7 @@ use plan_ahead::{app::*, event_handler::*, terminal::*, ui};
 fn main() -> Result<()> {
     let mut terminal = Terminal::new()?;
     let mut app = App::default();
+    app.state.load_tasks()?;
 
     while app.is_running {
         terminal.draw(ui::default_view)?;
