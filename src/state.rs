@@ -2,7 +2,7 @@ use chrono::{DateTime, Local};
 
 use crate::tasks::Task;
 
-use std::fs::{File, OpenOptions};
+use std::fs::{self, File, OpenOptions};
 
 #[derive(Default)]
 pub struct State {
@@ -30,9 +30,17 @@ impl State {
 }
 
 fn open_file() -> std::io::Result<File> {
-    OpenOptions::new()
+    let file = OpenOptions::new()
         .read(true)
-        .append(true)
+        .write(true)
         .create(true)
-        .open("tasks.json")
+        .open("tasks.json")?;
+    if fs::metadata("tasks.json")?.len() == 0 {
+        let default_content: Vec<Task> = Vec::new();
+        fs::write(
+            "tasks.json",
+            serde_json::to_string_pretty(&default_content)?,
+        )?
+    };
+    Ok(file)
 }
