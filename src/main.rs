@@ -2,8 +2,6 @@ use anyhow::Result;
 use crossterm::event;
 use plan_ahead::{app::*, event_handler::*, terminal::*, ui};
 
-fn foo() {println!("test");}
-
 fn main() -> Result<()> {
     let mut terminal = Terminal::new()?;
     let mut app = App::default();
