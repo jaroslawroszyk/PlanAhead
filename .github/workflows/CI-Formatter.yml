@@ -1,16 +1,24 @@
-name: Rust Formatter
+name: Rust Format Check
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-  rust-fmt:
+  check:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Set up Rust
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
-    - name: Rustfmt Check
+
+    - name: Rustfmt
       run: cargo fmt --all -- --check
