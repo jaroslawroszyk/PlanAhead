@@ -3,14 +3,10 @@ use chrono::{DateTime, Local};
 use crate::tasks::Task;
 
 use std::fs::{File, OpenOptions};
+
+#[derive(Default)]
 pub struct State {
     tasks: Vec<Task>,
-}
-
-impl Default for State {
-    fn default() -> Self {
-        State { tasks: Vec::new() }
-    }
 }
 
 impl State {
