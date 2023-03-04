@@ -49,6 +49,6 @@ fn calendar_view<B: Backend>(f: &mut Frame<B>, area: Rect) {
 }
 
 fn footer_view<B: Backend>(f: &mut Frame<B>, area: Rect) {
-    let text = "  q - quit, ...";
+    let text = "Q - quit | A - add task | E - edit task | M - modify task | Enter - complete task | ↑/↓ - navigate | D - delete quest";
     f.render_widget(Paragraph::new(text), area);
 }
