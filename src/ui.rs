@@ -71,7 +71,7 @@ fn footer_view<B: Backend>(f: &mut Frame<B>, area: Rect, app: &App) {
             f.render_widget(Paragraph::new(command), area);
         }
         InputMode::AddTask => {
-            let text = format!("  {}", app.state.text_input);
+            let text = format!("  >> {}", app.state.text_input);
             f.render_widget(Paragraph::new(text), area);
         }
     }
