@@ -17,7 +17,7 @@ impl EventHandler {
                     }
                     KeyCode::Char('x') => {
                         //Todo: add prompt for user ("Are you sure?...")
-                            app.state.clear_all_tasks()
+                        app.state.clear_all_tasks()
                     }
                     KeyCode::Up => app.state.tasks.previous(),
                     KeyCode::Down => app.state.tasks.next(),
