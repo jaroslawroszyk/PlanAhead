@@ -1,8 +1,14 @@
 use crate::state::State;
 
+pub enum InputMode {
+    Command,
+    AddTask,
+}
+
 pub struct App {
     pub is_running: bool,
     pub state: State,
+    pub input_mode: InputMode,
 }
 
 impl Default for App {
@@ -10,6 +16,7 @@ impl Default for App {
         App {
             is_running: true,
             state: State::default(),
+            input_mode: InputMode::Command,
         }
     }
 }

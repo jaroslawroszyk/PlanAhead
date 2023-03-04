@@ -8,7 +8,7 @@ fn main() -> Result<()> {
     app.state.load_tasks()?;
 
     while app.is_running {
-        terminal.draw(ui::default_view)?;
+        terminal.draw(|f| ui::default_view(f, &mut app))?;
 
         if let event::Event::Key(key) = event::read()? {
             EventHandler::on_key(key, &mut app)
