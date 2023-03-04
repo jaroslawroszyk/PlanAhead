@@ -1,7 +1,6 @@
 use crate::app::{App, InputMode};
 use anyhow::Result;
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
-use dialoguer::{console::style, Confirm};
 
 pub struct EventHandler;
 
@@ -18,16 +17,7 @@ impl EventHandler {
                     }
                     KeyCode::Char('x') => {
                         //Todo: add prompt for user ("Are you sure?...")
-                        let confirmed = Confirm::new()
-                            .with_prompt(format!(
-                                "{} {}",
-                                style("Are you sure you want to clear all tasks?").bold(),
-                                style("(y/n)").dim()
-                            ))
-                            .interact()?;
-                        if confirmed {
                             app.state.clear_all_tasks()
-                        }
                     }
                     KeyCode::Up => app.state.tasks.previous(),
                     KeyCode::Down => app.state.tasks.next(),
