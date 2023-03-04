@@ -1,15 +1,23 @@
 use crate::app::{App, InputMode};
+use anyhow::Result;
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
 
 pub struct EventHandler;
 
 impl EventHandler {
-    pub fn on_key(key: KeyEvent, app: &mut App) {
+    pub fn on_key(key: KeyEvent, app: &mut App) -> Result<()> {
         if key.kind == KeyEventKind::Press {
             match app.input_mode {
                 InputMode::Command => match key.code {
                     KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('Q') => {
                         app.is_running = false
+                    }
+                    KeyCode::Char('d') => {
+                        app.state.remove_selected_task();
+                    }
+                    KeyCode::Char('x') => {
+                        //Todo: add prompt for user ("Are you sure?...")
+                        app.state.clear_all_tasks()
                     }
                     KeyCode::Up => app.state.tasks.previous(),
                     KeyCode::Down => app.state.tasks.next(),
@@ -33,5 +41,6 @@ impl EventHandler {
                 },
             }
         }
+        Ok(())
     }
 }
