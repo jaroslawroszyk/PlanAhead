@@ -11,7 +11,10 @@ impl EventHandler {
             KeyCode::Char('m') => app.state.modify_task(),
             KeyCode::Enter => app.state.complete_task(),
             KeyCode::Char('d') => app.state.delete_task(),
-            KeyCode::Esc | KeyCode::Char('q') => Ok(app.is_running = false),
+            KeyCode::Esc | KeyCode::Char('q') => {
+                app.is_running = false;
+                Ok(())
+            }
             _ => Ok(()),
         }
         .ok();
