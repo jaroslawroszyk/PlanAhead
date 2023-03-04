@@ -11,7 +11,7 @@ fn main() -> Result<()> {
         terminal.draw(|f| ui::default_view(f, &mut app))?;
 
         if let event::Event::Key(key) = event::read()? {
-            EventHandler::on_key(key, &mut app)
+            EventHandler::on_key(key, &mut app).ok();
         }
     }
     Ok(())

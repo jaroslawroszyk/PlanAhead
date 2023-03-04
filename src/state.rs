@@ -45,6 +45,20 @@ impl State {
             .expect("error: could not save tasks to a file"); // TODO: handle failure
         self.text_input = String::new();
     }
+
+    pub fn remove_selected_task(&mut self) {
+        if let Some(selected) = self.tasks.state.selected() {
+            self.tasks.items.remove(selected);
+            self.save_tasks()
+                .expect("error: coult not save task to a file"); // TODO: error handling?
+        }
+    }
+
+    pub fn clear_all_tasks(&mut self) {
+        self.tasks.items.clear();
+        self.save_tasks()
+            .expect("error: coult not save task to a file"); // TODO: error handling?
+    }
 }
 
 enum FileMode {
