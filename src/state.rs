@@ -3,7 +3,10 @@ use tui::widgets::ListState;
 
 use crate::tasks::Task;
 
-use std::fs::{self, File, OpenOptions};
+use std::{
+    fs::{self, File, OpenOptions},
+    io::{BufReader, BufWriter},
+};
 
 pub struct State {
     pub text_input: String,
@@ -22,14 +25,16 @@ impl Default for State {
 impl State {
     pub fn load_tasks(&mut self) -> Result<()> {
         let file = open_file(FileMode::Load)?;
-        let tasks: Vec<Task> = serde_json::from_reader(file)?;
+        let reader = BufReader::new(file);
+        let tasks: Vec<Task> = serde_json::from_reader(reader)?;
         self.tasks = StatefulList::with_items(tasks);
         Ok(())
     }
 
     pub fn save_tasks(&self) -> Result<()> {
         let file = open_file(FileMode::Save)?;
-        serde_json::to_writer_pretty(file, &self.tasks.items)?;
+        let writer = BufWriter::new(file);
+        serde_json::to_writer_pretty(writer, &self.tasks.items)?;
         Ok(())
     }
 

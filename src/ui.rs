@@ -64,7 +64,7 @@ fn calendar_view<B: Backend>(f: &mut Frame<B>, area: Rect) {
     f.render_widget(block, area);
 }
 
-fn footer_view<B: Backend>(f: &mut Frame<B>, area: Rect, app: &mut App) {
+fn footer_view<B: Backend>(f: &mut Frame<B>, area: Rect, app: &App) {
     match &app.input_mode {
         InputMode::Command => {
             let text = "  Q - quit | A - add task | E - edit task | D - delete task | Enter - complete task | ↑/↓ - navigate | ← - unselect ";
