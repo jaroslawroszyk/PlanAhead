@@ -4,6 +4,13 @@ use crate::{application::State, backend::db};
 pub enum InputMode {
     Command,
     AddTask,
+    Prompt,
+}
+
+#[derive(PartialEq)]
+pub enum Actions {
+    AddTask,
+    ClearAllTasks,
 }
 
 pub struct App {
@@ -11,6 +18,7 @@ pub struct App {
     pub state: State,
     pub text_input: String,
     pub input_mode: InputMode,
+    pub previous_action: Actions,
 }
 
 impl Default for App {
@@ -20,6 +28,16 @@ impl Default for App {
             state: db::load().unwrap_or_default(),
             text_input: String::new(),
             input_mode: InputMode::Command,
+            previous_action: Actions::AddTask,
+        }
+    }
+}
+
+impl App {
+    //Todo: jaki bedzie previous action ?? zastanowic sie / dopracowac 
+    pub fn confirm_previous_action(&mut self) {
+        if self.previous_action == Actions::ClearAllTasks {
+            self.state.clear_all_tasks();
         }
     }
 }

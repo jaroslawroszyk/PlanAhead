@@ -9,7 +9,11 @@ use tui::{
     Frame,
 };
 
-pub struct DefaultView;
+pub trait View<B: Backend> {
+    fn render(&self, f: &mut Frame<B>, app: &mut App);
+}
+
+struct DefaultView;
 impl<B: Backend> View<B> for DefaultView {
     fn render(&self, f: &mut Frame<B>, app: &mut App) {
         let (task_chunk, calendar_chunk, footer_chunk) = Self::layout(f.size());
@@ -78,3 +82,68 @@ impl DefaultView {
         f.render_widget(block, area);
     }
 }
+<<<<<<< HEAD:src/ui/default_view.rs
+=======
+
+struct AddTaskView;
+impl<B: Backend> View<B> for AddTaskView {
+    fn render(&self, f: &mut Frame<B>, app: &mut App) {
+        let (task_chunk, calendar_chunk, footer_chunk) = DefaultView::layout(f.size());
+        DefaultView::render_main(f, f.size());
+        DefaultView::render_tasks(f, task_chunk, &mut app.state.tasks);
+        DefaultView::render_calendar(f, calendar_chunk);
+        Self::render_footer(f, footer_chunk, &app.text_input);
+    }
+}
+
+impl AddTaskView {
+    fn render_footer(f: &mut Frame<impl Backend>, area: Rect, text: &str) {
+        let text = format!("  >> {text}");
+        f.render_widget(Paragraph::new(text), area);
+    }
+}
+
+struct PromptView;
+impl<B: Backend> View<B> for PromptView {
+    fn render(&self, f: &mut Frame<B>, app: &mut App) {
+        let (task_chunk, calendar_chunk, footer_chunk) = DefaultView::layout(f.size());
+        DefaultView::render_main(f, f.size());
+        DefaultView::render_tasks(f, task_chunk, &mut app.state.tasks);
+        DefaultView::render_calendar(f, calendar_chunk);
+        DefaultView::render_footer(f, footer_chunk);
+
+        let chunk_vertical = Layout::default()
+            .direction(Direction::Vertical)
+            .margin(1)
+            .constraints(
+                [
+                    Constraint::Percentage(30),
+                    Constraint::Percentage(30),
+                    Constraint::Percentage(30),
+                ]
+                .as_ref(),
+            )
+            .split(f.size());
+
+        let chunk_horizontal = Layout::default()
+            .direction(Direction::Horizontal)
+            .margin(1)
+            .constraints(
+                [
+                    Constraint::Percentage(30),
+                    Constraint::Percentage(30),
+                    Constraint::Percentage(30),
+                ]
+                .as_ref(),
+            )
+            .split(chunk_vertical[1]);
+
+        let block = Block::default()
+            .title(" Prompt ")
+            .title_alignment(Alignment::Center)
+            .borders(Borders::ALL)
+            .border_type(BorderType::Rounded);
+        f.render_widget(block, chunk_horizontal[1]);
+    }
+}
+>>>>>>> 35427f9 (adding a prompt for the user to be sure they want to clear the entire list):src/ui.rs

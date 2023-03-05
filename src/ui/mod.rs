@@ -11,6 +11,7 @@ pub fn select_view<B: Backend>(input_mode: InputMode) -> Box<dyn View<B>> {
     match input_mode {
         InputMode::AddTask => Box::new(AddTaskView) as Box<dyn View<B>>,
         InputMode::Command => Box::new(DefaultView) as Box<dyn View<B>>,
+        InputMode::Prompt => Box::new(PromptView) as Box<dyn View<B>>,
     }
 }
 
