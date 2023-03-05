@@ -1,31 +1,57 @@
+use anyhow::Result;
 use chrono::{DateTime, Local};
+use serde::{Deserialize, Serialize};
+use std::str::FromStr;
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Task {
     pub name: String,
     pub priority: u8,
     pub date: DateTime<Local>,
 }
 
-impl Task {
-    pub fn new(name: &str, priority: Option<u8>, date: Option<DateTime<Local>>) -> Task {
+impl Default for Task {
+    fn default() -> Self {
         Task {
-            name: name.to_string(),
-            priority: priority.unwrap_or(1),
-            date: date.unwrap_or(Local::now()),
+            name: "".to_string(),
+            priority: 1,
+            date: Local::now(),
+        }
+    }
+}
+
+impl Task {
+    pub fn new(name: &str) -> Self {
+        Task {
+            name: name.into(),
+            ..Default::default()
         }
     }
 
-    pub fn from_string(str: &str) -> Option<Task> {
-        let args: Vec<&str> = str.split(';').map(|arg| arg.trim()).collect();
-        match args.len() {
-            1 => Some(Task::new(args[0], None, None)),
-            2 => {
-                let priority: u8 = args[1].parse().unwrap(); // TODO: handle failure
-                Some(Task::new(args[0], Some(priority), None))
+    pub fn with_priority(mut self, priority: u8) -> Self {
+        self.priority = priority;
+        self
+    }
+
+    pub fn with_date(mut self, date: DateTime<Local>) -> Self {
+        self.date = date;
+        self
+    }
+}
+
+impl FromStr for Task {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let args: Vec<&str> = s.split(';').map(|arg| arg.trim()).collect();
+        let task = match args[..] {
+            [name] => Task::new(name),
+            [name, priority] => {
+                let priority: u8 = priority.parse().map_err(|_| ())?;
+                Task::new(name).with_priority(priority)
             }
             // TODO: set date
-            _ => None,
-        }
+            _ => return Err(()),
+        };
+        Ok(task)
     }
 }
