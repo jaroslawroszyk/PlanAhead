@@ -1,4 +1,4 @@
-use crate::app::{App, InputMode};
+use crate::application::{App, InputMode};
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
 
 pub struct EventHandler;

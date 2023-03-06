@@ -1,4 +1,4 @@
-use crate::tasks::Task;
+use crate::application::Task;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use tui::widgets::ListState;
