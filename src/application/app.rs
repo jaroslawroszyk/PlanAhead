@@ -8,8 +8,7 @@ pub enum InputMode {
 }
 
 #[derive(PartialEq)]
-pub enum Actions {
-    AddTask,
+pub enum Action {
     ClearAllTasks,
 }
 
@@ -18,7 +17,7 @@ pub struct App {
     pub state: State,
     pub text_input: String,
     pub input_mode: InputMode,
-    pub previous_action: Actions,
+    pub previous_action: Option<Action>,
 }
 
 impl Default for App {
@@ -28,15 +27,14 @@ impl Default for App {
             state: db::load().unwrap_or_default(),
             text_input: String::new(),
             input_mode: InputMode::Command,
-            previous_action: Actions::AddTask,
+            previous_action: None,
         }
     }
 }
 
 impl App {
-    //Todo: jaki bedzie previous action ?? zastanowic sie / dopracowac 
     pub fn confirm_previous_action(&mut self) {
-        if self.previous_action == Actions::ClearAllTasks {
+        if self.previous_action == Some(Action::ClearAllTasks) {
             self.state.clear_all_tasks();
         }
     }

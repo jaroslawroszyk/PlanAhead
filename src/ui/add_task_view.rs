@@ -1,6 +1,5 @@
-use super::{DefaultView, View};
+use super::*;
 use crate::application::App;
-use tui::{backend::Backend, layout::Rect, widgets::Paragraph, Frame};
 
 pub struct AddTaskView;
 impl<B: Backend> View<B> for AddTaskView {
