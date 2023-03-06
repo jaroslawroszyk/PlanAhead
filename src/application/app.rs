@@ -1,4 +1,4 @@
-use crate::{database, state::states::State};
+use crate::{application::State, backend::db};
 
 #[derive(Clone, Copy)]
 pub enum InputMode {
@@ -17,7 +17,7 @@ impl Default for App {
     fn default() -> Self {
         App {
             is_running: true,
-            state: database::load().unwrap_or_default(),
+            state: db::load().unwrap_or_default(),
             text_input: String::new(),
             input_mode: InputMode::Command,
         }
@@ -26,7 +26,7 @@ impl Default for App {
 
 impl Drop for App {
     fn drop(&mut self) {
-        database::save(&self.state).unwrap_or_else(|err| {
+        db::save(&self.state).unwrap_or_else(|err| {
             eprintln!("Faild to save app state: {err}");
         });
     }

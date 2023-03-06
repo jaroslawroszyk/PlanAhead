@@ -1,9 +1,7 @@
-use std::str::FromStr;
-
-use serde::{Deserialize, Serialize};
-use tui::widgets::ListState;
-
 use crate::application::Task;
+use serde::{Deserialize, Serialize};
+use std::str::FromStr;
+use tui::widgets::ListState;
 
 #[derive(Serialize, Deserialize, Default)]
 pub struct State {

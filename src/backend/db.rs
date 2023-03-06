@@ -1,10 +1,9 @@
+use crate::application::State;
 use anyhow::Result;
 use std::{
     fs::OpenOptions,
     io::{BufReader, BufWriter},
 };
-
-use crate::state::states::State;
 
 const DB_PATH: &str = "tasks.json";
 

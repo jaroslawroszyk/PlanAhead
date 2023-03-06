@@ -1,9 +1,9 @@
 use anyhow::Result;
 use crossterm::event;
 use plan_ahead::{
-    application::App,
-    event_handler::event_handlers::EventHandler,
-    user_interface::{ui, Terminal},
+    application::{App, EventHandler},
+    backend::terminal::Terminal,
+    ui,
 };
 
 fn main() -> Result<()> {
