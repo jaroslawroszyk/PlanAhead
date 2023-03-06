@@ -1,6 +1,10 @@
 use anyhow::Result;
 use crossterm::event;
-use plan_ahead::{app::*, event_handler::*, terminal::*, ui};
+use plan_ahead::{
+    application::App,
+    event_handler::event_handlers::EventHandler,
+    user_interface::{ui, Terminal},
+};
 
 fn main() -> Result<()> {
     let mut terminal = Terminal::new()?;

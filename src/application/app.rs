@@ -1,4 +1,4 @@
-use crate::{database, state::State};
+use crate::{database, state::states::State};
 
 #[derive(Clone, Copy)]
 pub enum InputMode {

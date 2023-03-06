@@ -1,8 +1,6 @@
-use crate::{
-    app::{App, InputMode},
-    state::StatefulList,
-    tasks::Task,
-};
+use crate::application::{App, InputMode, Task};
+use crate::state::states::StatefulList;
+
 use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
