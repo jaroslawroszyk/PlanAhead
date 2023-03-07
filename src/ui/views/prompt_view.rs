@@ -1,5 +1,4 @@
 use super::*;
-use crate::application::App;
 
 pub struct PromptView;
 impl<B: Backend> View<B> for PromptView {

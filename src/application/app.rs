@@ -1,28 +1,18 @@
-use super::Task;
-use crate::backend::db;
+use crate::{
+    application::{State, Task},
+    backend::db,
+};
 use std::str::FromStr;
-
-#[derive(Clone, Copy)]
-pub enum InputMode {
-    Command,
-    AddTask,
-    Prompt,
-}
 
 #[derive(PartialEq)]
 pub enum Action {
     ClearAllTasks,
 }
-impl Default for InputMode {
-    fn default() -> Self {
-        InputMode::Command
-    }
-}
 
 pub struct App {
     pub is_running: bool,
     pub tasks: Vec<Task>,
-    pub input_mode: InputMode,
+    pub state: State,
     pub input: String,
     pub previous_action: Option<Action>,
 }
@@ -32,7 +22,7 @@ impl Default for App {
         App {
             is_running: true,
             tasks: db::load().unwrap_or_default(),
-            input_mode: InputMode::Command,
+            state: State::Default,
             input: String::default(),
             previous_action: None,
         }

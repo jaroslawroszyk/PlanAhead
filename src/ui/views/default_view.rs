@@ -1,5 +1,4 @@
 use super::*;
-use crate::application::{App, Task};
 
 pub struct DefaultView;
 impl<B: Backend> View<B> for DefaultView {
