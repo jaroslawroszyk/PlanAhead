@@ -1,3 +1,4 @@
+use super::Action;
 use crate::application::{App, InputMode};
 use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
 
@@ -13,6 +14,7 @@ impl EventHandler {
         match app.input_mode {
             InputMode::Command => Self::handle_command_key_press(key, app),
             InputMode::AddTask => Self::handle_add_task_key_press(key, app),
+            InputMode::Prompt => Self::handle_prompt_key_press(key, app),
         };
     }
 
@@ -20,7 +22,10 @@ impl EventHandler {
         match key.code {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('Q') => app.is_running = false,
             KeyCode::Char('d') => app.state.remove_selected_task(),
-            KeyCode::Char('x') => app.state.clear_all_tasks(), //Todo: add prompt for user ("Are you sure?...")
+            KeyCode::Char('x') => {
+                app.input_mode = InputMode::Prompt;
+                app.previous_action = Some(Action::ClearAllTasks);
+            }
             KeyCode::Up => app.state.tasks.previous(),
             KeyCode::Down => app.state.tasks.next(),
             KeyCode::Left => app.state.tasks.unselect(),
@@ -41,6 +46,21 @@ impl EventHandler {
             }
             KeyCode::Esc => app.input_mode = InputMode::Command,
             KeyCode::Char(c) => app.text_input.push(c),
+            _ => (),
+        };
+    }
+
+    fn handle_prompt_key_press(key: KeyEvent, app: &mut App) {
+        match key.code {
+            KeyCode::Enter => {
+                app.confirm_previous_action();
+                app.previous_action = None;
+                app.input_mode = InputMode::Command;
+            }
+            KeyCode::Esc => {
+                app.input_mode = InputMode::Command;
+                app.previous_action = None;
+            }
             _ => (),
         };
     }

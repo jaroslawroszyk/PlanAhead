@@ -1,13 +1,6 @@
-use super::View;
+use super::*;
 use crate::application::StatefulList;
 use crate::application::{App, Task};
-use tui::{
-    backend::Backend,
-    layout::{Alignment, Constraint, Direction, Layout, Rect},
-    style::{Color, Style},
-    widgets::{Block, BorderType, Borders, List, ListItem, Paragraph},
-    Frame,
-};
 
 pub struct DefaultView;
 impl<B: Backend> View<B> for DefaultView {
@@ -38,8 +31,8 @@ impl DefaultView {
     }
 
     pub fn render_footer(f: &mut Frame<impl Backend>, area: Rect) {
-        let text = "  Q - quit | A - add task | E - edit task | D - delete task | X - clear all tasks | Enter - complete task | ↑/↓ - navigate | ← - unselect ";
-        f.render_widget(Paragraph::new(text), area);
+        let command = "  Q - quit | A - add task | E - edit task | D - delete task | X - clear all tasks | Enter - complete task | ↑/↓ - navigate | ← - unselect ";
+        f.render_widget(Paragraph::new(command), area);
     }
 
     pub fn render_calendar(f: &mut Frame<impl Backend>, area: Rect) {
