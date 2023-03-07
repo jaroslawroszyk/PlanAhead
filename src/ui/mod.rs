@@ -1,11 +1,13 @@
 pub mod add_task_view;
 pub mod default_view;
 pub mod prompt_view;
+pub mod stateful_ui;
 
 pub use crate::application::{App, InputMode};
 pub use add_task_view::*;
 pub use default_view::*;
 pub use prompt_view::*;
+pub use stateful_ui::*;
 
 use tui::{
     backend::Backend,
@@ -25,5 +27,5 @@ pub fn select_view<B: Backend>(input_mode: InputMode) -> Box<dyn View<B>> {
 }
 
 pub trait View<B: Backend> {
-    fn render(&self, f: &mut Frame<B>, app: &mut App);
+    fn render(&self, f: &mut Frame<B>, app: &App, ui: &mut StatefulUi);
 }

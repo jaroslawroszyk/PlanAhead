@@ -3,8 +3,8 @@ use crate::application::App;
 
 pub struct PromptView;
 impl<B: Backend> View<B> for PromptView {
-    fn render(&self, f: &mut Frame<B>, app: &mut App) {
-        DefaultView {}.render(f, app);
+    fn render(&self, f: &mut Frame<B>, app: &App, ui: &mut StatefulUi) {
+        DefaultView {}.render(f, app, ui);
         let txt = "Are you sure ?";
         PromptView::render_prompt(f, txt, 30, 18);
     }
