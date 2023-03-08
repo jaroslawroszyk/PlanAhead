@@ -1,57 +1,36 @@
-use crate::application::Task;
-use serde::{Deserialize, Serialize};
-use std::str::FromStr;
-use tui::widgets::ListState;
+use crate::{
+    application::event_handlers::*,
+    ui::{AddTaskView, DefaultView, PromptView, View},
+};
+use tui::backend::Backend;
 
-#[derive(Serialize, Deserialize, Default)]
-pub struct State {
-    pub tasks: StatefulList<Task>,
+#[derive(Clone, Copy)]
+pub enum State {
+    Default,
+    AddTask,
+    Prompt,
+}
+
+impl Default for State {
+    fn default() -> Self {
+        State::Default
+    }
 }
 
 impl State {
-    pub fn add_task(&mut self, text: &str) {
-        if let Ok(task) = Task::from_str(text) {
-            self.tasks.items.push(task);
+    pub fn view<B: Backend>(&self) -> Box<dyn View<B>> {
+        match self {
+            State::AddTask => Box::new(AddTaskView) as Box<dyn View<B>>,
+            State::Default => Box::new(DefaultView) as Box<dyn View<B>>,
+            State::Prompt => Box::new(PromptView) as Box<dyn View<B>>,
         }
     }
 
-    pub fn remove_selected_task(&mut self) {
-        if let Some(selected) = self.tasks.state.selected() {
-            self.tasks.items.remove(selected);
+    pub fn event_handler(&self) -> Box<dyn EventHandler> {
+        match self {
+            State::AddTask => Box::new(AddTaskEventHandler) as Box<dyn EventHandler>,
+            State::Default => Box::new(DefaultEventHandler) as Box<dyn EventHandler>,
+            State::Prompt => Box::new(PromptEventHandler) as Box<dyn EventHandler>,
         }
-    }
-
-    pub fn clear_all_tasks(&mut self) {
-        self.tasks.items.clear();
-    }
-}
-
-#[derive(Serialize, Deserialize, Default)]
-pub struct StatefulList<T> {
-    #[serde(skip)]
-    pub state: ListState,
-    pub items: Vec<T>,
-}
-
-impl<T> StatefulList<T> {
-    pub fn with_items(mut self, items: Vec<T>) -> Self {
-        self.items = items;
-        self
-    }
-
-    pub fn next(&mut self) {
-        let current = self.state.selected();
-        let next = current.map(|i| (i + 1) % self.items.len());
-        self.state.select(Some(next.unwrap_or(0)));
-    }
-
-    pub fn previous(&mut self) {
-        let current = self.state.selected();
-        let previous = current.map(|i| i.checked_sub(1).unwrap_or(self.items.len() - 1));
-        self.state.select(Some(previous.unwrap_or(0)));
-    }
-
-    pub fn unselect(&mut self) {
-        self.state.select(None);
     }
 }

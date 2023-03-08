@@ -1,22 +1,18 @@
 use anyhow::Result;
 use crossterm::event;
-use plan_ahead::{
-    application::{App, EventHandler},
-    backend::terminal::Terminal,
-    ui,
-};
+use plan_ahead::{application::App, backend::terminal::Terminal, ui::stateful_ui::StatefulUi};
 
 fn main() -> Result<()> {
     let mut terminal = Terminal::new()?;
     let mut app = App::default();
+    let mut ui = StatefulUi::default();
 
     while app.is_running {
-        let view = ui::select_view(app.input_mode);
-        terminal.draw(|f| view.render(f, &mut app))?;
+        let view = app.state.view();
+        terminal.draw(|f| view.render(f, &app, &mut ui))?;
 
-        if let event::Event::Key(key) = event::read()? {
-            EventHandler::on_key(key, &mut app);
-        }
+        let handler = app.state.event_handler();
+        handler.on_event(event::read()?, &mut app, &mut ui);
     }
     Ok(())
 }
