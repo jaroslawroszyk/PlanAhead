@@ -14,6 +14,12 @@ impl EventHandler for DefaultEventHandler {
             KeyCode::Down => ui.next_task(app.tasks.len()),
             KeyCode::Left => ui.unselect_task(),
             KeyCode::Char('a') | KeyCode::Char('A') => app.state = State::AddTask,
+            KeyCode::Char('e') | KeyCode::Char('E') => {
+                app.state = State::EditTask;
+                if let Some(idx) = ui.selected_task() {
+                    app.input = app.tasks[idx].to_string()
+                }
+            }
             _ => (),
         };
     }

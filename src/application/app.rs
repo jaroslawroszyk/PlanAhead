@@ -52,6 +52,14 @@ impl App {
         }
     }
 
+    pub fn edit_task(&mut self, idx: Option<usize>) {
+        if let Some(i) = idx {
+            if let Ok(task) = Task::from_str(&self.input) {
+                self.tasks[i] = task;
+            }
+        }
+    }
+
     pub fn remove_selected_task(&mut self, selected: Option<usize>) {
         if let Some(selected) = selected {
             self.tasks.remove(selected);

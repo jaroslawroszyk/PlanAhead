@@ -1,10 +1,10 @@
-mod add_task_view;
 mod default_view;
 mod prompt_view;
+mod task_input_view;
 
-pub use add_task_view::*;
 pub use default_view::*;
 pub use prompt_view::*;
+pub use task_input_view::*;
 
 use crate::{
     application::{App, Task},
