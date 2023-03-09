@@ -69,4 +69,11 @@ impl App {
     pub fn clear_all_tasks(&mut self) {
         self.tasks.clear();
     }
+
+    pub fn change_task_status(&mut self, selected: Option<usize>) {
+        if let Some(idx) = selected {
+            let current_task = &mut self.tasks[idx];
+            current_task.toogle_status();
+        }
+    }
 }
