@@ -42,6 +42,20 @@ impl DefaultView {
         f.render_widget(block, area);
     }
 
+    fn make_content(task: &Task) -> Spans {
+        if task.is_done {
+            Spans::from(vec![
+                Span::styled("✔ ", Style::default()),
+                Span::styled(
+                    task.name.clone(),
+                    Style::default().add_modifier(Modifier::CROSSED_OUT),
+                ),
+            ])
+        } else {
+            Spans::from(vec![Span::raw("  "), Span::raw(task.name.clone())])
+        }
+    }
+
     pub fn render_tasks(
         f: &mut Frame<impl Backend>,
         area: Rect,
@@ -50,13 +64,15 @@ impl DefaultView {
     ) {
         let items: Vec<ListItem> = tasks
             .iter()
-            .map(|task| ListItem::new(format!("  {}", task.name)))
+            .map(|task| ListItem::new(Self::make_content(task)))
             .collect();
+
         let block = Block::default()
             .title(" Tasks ")
             .title_alignment(Alignment::Left)
             .borders(Borders::ALL)
             .border_type(BorderType::Rounded);
+
         let list = List::new(items)
             .block(block)
             .highlight_style(Style::default().bg(Color::White).fg(Color::Black))
