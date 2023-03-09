@@ -55,3 +55,9 @@ impl FromStr for Task {
         Ok(task)
     }
 }
+
+impl ToString for Task {
+    fn to_string(&self) -> String {
+        format!("{}; {}", self.name, self.priority)
+    }
+}
