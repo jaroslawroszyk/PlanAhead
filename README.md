@@ -1,3 +1,7 @@
+<a href="https://www.repostatus.org/#wip"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public." /></a>
+[![Clippy Check](https://github.com/jaroslawroszyk/PlanAhead/actions/workflows/CI-CLIPPY.yml/badge.svg)](https://github.com/jaroslawroszyk/PlanAhead/actions/workflows/CI-CLIPPY.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](#license)
+
 # PlanAhead <img title="" src="./assets/icon.svg" align="left" width="90" style="padding-right: 0.5ch">
 ### Simple and effective way to manage your daily tasks
 
