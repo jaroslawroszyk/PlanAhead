@@ -40,6 +40,13 @@ impl DefaultView {
             .borders(Borders::ALL)
             .border_type(BorderType::Rounded);
         f.render_widget(block, area);
+
+        let margin = Margin {
+            vertical: 1,
+            horizontal: 2,
+        };
+        let calendar = CalendarWidget::from(Local::now());
+        f.render_widget(calendar, area.inner(&margin));
     }
 
     fn make_content(task: &Task) -> Spans {
