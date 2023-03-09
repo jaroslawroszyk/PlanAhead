@@ -13,5 +13,3 @@ tui = "0.19.0"
 serde = { version = "1.0.154", features = ["derive"] }
 serde_json = "1.0.94"
 chrono = { version = "0.4.23", features = ["serde"] }
-unicode-width = "0.1"
-dialoguer = "0.10.3"
