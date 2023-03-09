@@ -8,6 +8,7 @@ pub struct Task {
     pub name: String,
     pub priority: u8,
     pub date: DateTime<Local>,
+    pub is_done: bool,
 }
 
 impl Default for Task {
@@ -16,6 +17,7 @@ impl Default for Task {
             name: "".to_string(),
             priority: 1,
             date: Local::now(),
+            is_done: false,
         }
     }
 }
@@ -36,6 +38,10 @@ impl Task {
     pub fn with_date(mut self, date: DateTime<Local>) -> Self {
         self.date = date;
         self
+    }
+
+    pub fn change_status(&mut self, is_done: bool) {
+        self.is_done = is_done;
     }
 }
 
