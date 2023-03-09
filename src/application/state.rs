@@ -4,18 +4,13 @@ use crate::{
 };
 use tui::backend::Backend;
 
-#[derive(Clone, Copy)]
+#[derive(Default, Clone, Copy)]
 pub enum State {
+    #[default]
     Default,
     AddTask,
     EditTask,
     Prompt,
-}
-
-impl Default for State {
-    fn default() -> Self {
-        State::Default
-    }
 }
 
 impl State {
