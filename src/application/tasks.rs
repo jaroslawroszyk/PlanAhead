@@ -40,8 +40,8 @@ impl Task {
         self
     }
 
-    pub fn change_status(&mut self, is_done: bool) {
-        self.is_done = is_done;
+    pub fn toogle_status(&mut self) {
+        self.is_done = !self.is_done;
     }
 }
 

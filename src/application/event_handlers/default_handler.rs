@@ -20,6 +20,7 @@ impl EventHandler for DefaultEventHandler {
                     app.state = State::EditTask;
                 }
             }
+            KeyCode::Enter => app.change_task_status(ui.selected_task()),
             _ => (),
         };
     }
