@@ -12,5 +12,9 @@ jobs:
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
+
+    - name: Build
+      run: cargo build
+
     - name: Clippy Check
       run: cargo clippy --all-features --all-targets -- -D warnings
