@@ -8,11 +8,12 @@ pub use task_input_view::*;
 
 use crate::{
     application::{App, Task},
-    ui::StatefulUi,
+    ui::{CalendarWidget, StatefulUi},
 };
+use chrono::Local;
 use tui::{
     backend::Backend,
-    layout::{Alignment, Constraint, Direction, Layout, Rect},
+    layout::{Alignment, Constraint, Direction, Layout, Margin, Rect},
     style::{Color, Modifier, Style},
     text::{Span, Spans},
     widgets::{Block, BorderType, Borders, List, ListItem, Paragraph, Wrap},
