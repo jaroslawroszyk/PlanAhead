@@ -24,8 +24,8 @@ impl Widget for CalendarWidget {
         let bounds = self.widget_bounds(4, 2);
         if area.width < bounds.width || area.height < bounds.height {
             return; // TODO: figure out what to do when area is to small
-        }
-        area = self.align_area(area, bounds);
+        };
+        area.height = bounds.height;
         let [header, arrows, weekdays, rest] = self.layout(area);
 
         let month = Month::from_u32(self.month).unwrap();
@@ -91,17 +91,6 @@ impl CalendarWidget {
             width: day_width * 7,
             height: day_height * 6 + header_height,
         }
-    }
-
-    fn align_area(&self, mut area: Rect, bounds: Rect) -> Rect {
-        let padd = (area.width - bounds.width) / 2;
-        area.width = bounds.width;
-        area.x += padd;
-
-        let padd = (area.height - bounds.height) / 2;
-        area.height = bounds.height;
-        area.y += padd;
-        area
     }
 
     fn generate_day_numbers(&self) -> impl Iterator<Item = (u32, bool)> {
