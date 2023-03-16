@@ -1,46 +1,7 @@
 use super::*;
 
-const FOOTER_HEIGHT: u16 = 3;
-const CALENDAR_WIDTH: u16 = 31;
-
 pub struct DefaultView;
-impl<B: Backend> View<B> for DefaultView {
-    fn render(&self, f: &mut Frame<B>, app: &App, ui: &mut StatefulUi) {
-        let window = f.size();
-        if window.height < 4 || window.width < 8 {
-            return;
-        }
-        let [mut top_left, top_right, bottom] = Self::layout(window);
-
-        match (
-            window.width > 2 * CALENDAR_WIDTH,
-            window.height > 2 * FOOTER_HEIGHT,
-        ) {
-            (true, true) => {
-                Self::render_calendar(f, top_right);
-                Self::render_vertical_separator(f, window);
-                Self::render_footer(f, bottom);
-                Self::render_horizontal_separator(f, window);
-            }
-            (false, true) => {
-                top_left.width = window.width - 2 * top_left.x;
-                Self::render_footer(f, bottom);
-                Self::render_horizontal_separator(f, window);
-            }
-            (true, false) => {
-                top_left.height = window.height - 2 * top_left.y;
-                Self::render_vertical_separator(f, window);
-                Self::render_calendar(f, top_right);
-            }
-            (false, false) => {
-                top_left.height = window.height - 2 * top_left.y;
-                top_left.width = window.width - 2 * top_left.x;
-            }
-        }
-        Self::render_tasks(f, top_left, &app.tasks, ui);
-        Self::render_main(f, window);
-    }
-}
+impl<B: Backend> View<B> for DefaultView {}
 
 impl DefaultView {
     pub fn layout(size: Rect) -> [Rect; 3] {
