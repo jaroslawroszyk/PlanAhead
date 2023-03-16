@@ -6,29 +6,44 @@ const CALENDAR_WIDTH: u16 = 31;
 pub struct DefaultView;
 impl<B: Backend> View<B> for DefaultView {
     fn render(&self, f: &mut Frame<B>, app: &App, ui: &mut StatefulUi) {
-        let [top_left, top_right, bottom] = Self::layout(f.size());
-        Self::render_separators(f, f.size());
-        Self::render_main(f, f.size());
+        let window = f.size();
+        if window.height < 4 || window.width < 8 {
+            return;
+        }
+        let [mut top_left, top_right, bottom] = Self::layout(window);
+
+        match (
+            window.width > 2 * CALENDAR_WIDTH,
+            window.height > 2 * FOOTER_HEIGHT,
+        ) {
+            (true, true) => {
+                Self::render_calendar(f, top_right);
+                Self::render_vertical_separator(f, window);
+                Self::render_footer(f, bottom);
+                Self::render_horizontal_separator(f, window);
+            }
+            (false, true) => {
+                top_left.width = window.width - 2 * top_left.x;
+                Self::render_footer(f, bottom);
+                Self::render_horizontal_separator(f, window);
+            }
+            (true, false) => {
+                top_left.height = window.height - 2 * top_left.y;
+                Self::render_vertical_separator(f, window);
+                Self::render_calendar(f, top_right);
+            }
+            (false, false) => {
+                top_left.height = window.height - 2 * top_left.y;
+                top_left.width = window.width - 2 * top_left.x;
+            }
+        }
         Self::render_tasks(f, top_left, &app.tasks, ui);
-        Self::render_calendar(f, top_right);
-        Self::render_footer(f, bottom);
+        Self::render_main(f, window);
     }
 }
 
 impl DefaultView {
     pub fn layout(size: Rect) -> [Rect; 3] {
-        /*
-              0                  w - 31        w
-            0 +--------------------------------+
-              | tasks              | calendar  |
-              |                    |           |
-              |                    |           |
-              |                    |           |
-              |                    |           |
-        h - 2 +--------------------------------|
-              | prompt / help                  |
-            h +--------------------------------+
-        */
         let [_padding, top, bottom] = Layout::default()
             .direction(Direction::Vertical)
             .constraints([Constraint::Length(1), Constraint::Length(size.height - FOOTER_HEIGHT - 1), Constraint::Length(FOOTER_HEIGHT)])
@@ -96,22 +111,24 @@ impl DefaultView {
         f.render_stateful_widget(list, area, &mut ui.tasks);
     }
 
-    pub fn render_separators(f: &mut Frame<impl Backend>, area: Rect) {
-        let horizontal = Rect {
+    pub fn render_horizontal_separator(f: &mut Frame<impl Backend>, area: Rect) {
+        let area = Rect {
             x: 1,
             y: area.height - FOOTER_HEIGHT,
             width: area.width - 2,
             height: 1,
         };
+        f.render_widget(Block::default().borders(Borders::TOP), area);
+    }
 
-        let vertical = Rect {
-            x: area.width - CALENDAR_WIDTH - 1,
+    pub fn render_vertical_separator(f: &mut Frame<impl Backend>, area: Rect) {
+        let area = Rect {
+            x: area.width - CALENDAR_WIDTH,
             y: 1,
             width: 1,
-            height: area.height - FOOTER_HEIGHT - 1,
+            height: area.height - FOOTER_HEIGHT + 1,
         };
-        f.render_widget(Block::default().borders(Borders::TOP), horizontal);
-        f.render_widget(Block::default().borders(Borders::RIGHT), vertical);
+        f.render_widget(Block::default().borders(Borders::RIGHT), area);
     }
 
     pub fn render_main(f: &mut Frame<impl Backend>, area: Rect) {
