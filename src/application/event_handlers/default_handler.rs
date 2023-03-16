@@ -5,8 +5,8 @@ impl EventHandler for DefaultEventHandler {
     fn on_key_press(&self, key: KeyEvent, app: &mut App, ui: &mut StatefulUi) {
         match key.code {
             KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('Q') => app.is_running = false,
-            KeyCode::Char('d') => app.remove_selected_task(ui.selected_task()),
-            KeyCode::Char('x') => {
+            KeyCode::Char('d') | KeyCode::Char('D') => app.remove_selected_task(ui.selected_task()),
+            KeyCode::Char('c') | KeyCode::Char('C') => {
                 app.state = State::Prompt;
                 app.previous_action = Some(Action::ClearAllTasks);
             }
