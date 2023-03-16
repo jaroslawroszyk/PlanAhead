@@ -4,26 +4,6 @@ pub struct DefaultView;
 impl<B: Backend> View<B> for DefaultView {}
 
 impl DefaultView {
-    pub fn layout(size: Rect) -> [Rect; 3] {
-        let [_padding, top, bottom] = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Length(1), Constraint::Length(size.height - FOOTER_HEIGHT - 1), Constraint::Length(FOOTER_HEIGHT)])
-            .split(size)[..3] else { unreachable!() };
-
-        let [top_l, top_r, _padding] = Layout::default()
-            .direction(Direction::Horizontal)
-            .constraints([Constraint::Length(size.width - CALENDAR_WIDTH), Constraint::Length(CALENDAR_WIDTH-1), Constraint::Length(1)])
-            .split(top)[..3] else { unreachable!() };
-
-        #[rustfmt::skip]
-        let layout = [
-            top_l.inner( &Margin { vertical: 0, horizontal: 2 }),
-            top_r.inner( &Margin { vertical: 0, horizontal: 1 }),
-            bottom.inner(&Margin { vertical: 1, horizontal: 2 }),
-        ];
-        layout
-    }
-
     pub fn clear(f: &mut Frame<impl Backend>, area: Rect) {
         let (w, h) = (area.width as usize, area.height as usize);
         let text = vec![Spans::from(Span::styled(" ".repeat(w), Style::reset())); h];
@@ -31,6 +11,7 @@ impl DefaultView {
     }
 
     pub fn render_footer(f: &mut Frame<impl Backend>, area: Rect) {
+        DefaultView::render_horizontal_separator(f, area);
         let dimmed = Style::default().add_modifier(Modifier::DIM);
 
         #[rustfmt::skip]
@@ -48,6 +29,7 @@ impl DefaultView {
     }
 
     pub fn render_calendar(f: &mut Frame<impl Backend>, area: Rect) {
+        DefaultView::render_vertical_separator(f, area);
         let calendar = CalendarWidget::from(Local::now());
         f.render_widget(calendar, area);
     }
@@ -81,8 +63,8 @@ impl DefaultView {
     pub fn render_horizontal_separator(f: &mut Frame<impl Backend>, area: Rect) {
         let area = Rect {
             x: 1,
-            y: area.height - FOOTER_HEIGHT,
-            width: area.width - 2,
+            y: area.y.saturating_sub(1),
+            width: area.width + 2,
             height: 1,
         };
         f.render_widget(Block::default().borders(Borders::TOP), area);
@@ -90,12 +72,12 @@ impl DefaultView {
 
     pub fn render_vertical_separator(f: &mut Frame<impl Backend>, area: Rect) {
         let area = Rect {
-            x: area.width - CALENDAR_WIDTH,
+            x: area.x.saturating_sub(1),
             y: 1,
             width: 1,
-            height: area.height - FOOTER_HEIGHT + 1,
+            height: area.height,
         };
-        f.render_widget(Block::default().borders(Borders::RIGHT), area);
+        f.render_widget(Block::default().borders(Borders::LEFT), area);
     }
 
     pub fn render_main(f: &mut Frame<impl Backend>, area: Rect) {

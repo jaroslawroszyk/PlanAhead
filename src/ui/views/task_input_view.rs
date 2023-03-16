@@ -3,10 +3,11 @@ use super::*;
 pub struct TaskInputView;
 impl<B: Backend> View<B> for TaskInputView {
     fn post_render(&self, f: &mut Frame<B>, app: &App, _: &mut StatefulUi) {
-        let [_, _, footer_chunk] = DefaultView::layout(f.size());
-
-        DefaultView::clear(f, footer_chunk);
-        Self::render_footer(f, footer_chunk, &app.input);
+        let layout = ViewLayout::new(f.size());
+        if let Some(footer) = layout.footer {
+            DefaultView::clear(f, footer);
+            Self::render_footer(f, footer, &app.input);
+        }
     }
 }
 
