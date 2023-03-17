@@ -87,7 +87,7 @@ impl ToString for ESquare {
 impl FromStr for ESquare {
     type Err = ();
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
+        match s.to_uppercase().as_str() {
             "UI" | "IU" => Ok(ESquare::ImportantUrgent),
             "I" => Ok(ESquare::Important),
             "U" => Ok(ESquare::Urgent),
