@@ -9,6 +9,7 @@ impl EventHandler for DefaultEventHandler {
             KeyCode::Char('c') | KeyCode::Char('C') => {
                 app.state = State::Prompt;
                 app.previous_action = Some(Action::ClearAllTasks);
+                ui.unselect_task();
             }
             KeyCode::Up => ui.previous_task(app.tasks.len()),
             KeyCode::Down => ui.next_task(app.tasks.len()),
@@ -16,6 +17,7 @@ impl EventHandler for DefaultEventHandler {
             KeyCode::Char('a') | KeyCode::Char('A') => app.state = State::AddTask,
             KeyCode::Char('e') | KeyCode::Char('E') => {
                 if let Some(idx) = ui.selected_task() {
+                    assert!(idx > 0);
                     app.input = app.tasks[idx].to_string();
                     app.state = State::EditTask;
                 }
