@@ -53,7 +53,7 @@ impl PromptView {
             .alignment(Alignment::Center)
             .wrap(Wrap { trim: true });
 
-        DefaultView::clear(f, chunk_horizontal[1]);
+        ViewLayout::clear(f, chunk_horizontal[1]);
         f.render_widget(parag, chunk_horizontal[1]);
     }
 }

@@ -47,4 +47,10 @@ impl ViewLayout {
             },
         }
     }
+
+    pub fn clear(f: &mut Frame<impl Backend>, area: Rect) {
+        let (w, h) = (area.width as usize, area.height as usize);
+        let text = vec![Spans::from(Span::styled(" ".repeat(w), Style::reset())); h];
+        f.render_widget(Paragraph::new(text), area);
+    }
 }
