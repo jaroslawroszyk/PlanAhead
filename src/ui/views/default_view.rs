@@ -1,66 +1,39 @@
 use super::*;
 
 pub struct DefaultView;
-impl<B: Backend> View<B> for DefaultView {
-    fn render(&self, f: &mut Frame<B>, app: &App, ui: &mut StatefulUi) {
-        let (task_chunk, calendar_chunk, footer_chunk) = Self::layout(f.size());
-        Self::render_main(f, f.size());
-        Self::render_tasks(f, task_chunk, &app.tasks, ui);
-        Self::render_calendar(f, calendar_chunk);
-        Self::render_footer(f, footer_chunk);
-    }
-}
+impl<B: Backend> View<B> for DefaultView {}
 
 impl DefaultView {
-    pub fn layout(size: Rect) -> (Rect, Rect, Rect) {
-        let chunks = Layout::default()
-            .direction(Direction::Vertical)
-            .margin(1)
-            .constraints([Constraint::Percentage(98), Constraint::Percentage(2)].as_ref())
-            .split(size);
-
-        let top_chunks = Layout::default()
-            .direction(Direction::Horizontal)
-            .margin(1)
-            .constraints([Constraint::Percentage(70), Constraint::Percentage(30)].as_ref())
-            .split(chunks[0]);
-
-        (top_chunks[0], top_chunks[1], chunks[1])
-    }
-
     pub fn render_footer(f: &mut Frame<impl Backend>, area: Rect) {
-        let command = "  Q - quit | A - add task | E - edit task | D - delete task | X - clear all tasks | Enter - complete task | ↑/↓ - navigate | ← - unselect ";
-        f.render_widget(Paragraph::new(command), area);
+        DefaultView::render_horizontal_separator(f, area);
+        let dimmed = Style::default().add_modifier(Modifier::DIM);
+
+        #[rustfmt::skip]
+        let shortcuts = Paragraph::new(Spans::from(vec![
+            Span::raw("Q"),    Span::styled("uit",   dimmed),
+            Span::raw(" | A"), Span::styled("dd",    dimmed),
+            Span::raw(" | E"), Span::styled("dit",   dimmed),
+            Span::raw(" | D"), Span::styled("elete", dimmed),
+            Span::raw(" | C"), Span::styled("lear",  dimmed),
+        ]));
+        let navigation = Paragraph::new("Enter | Esc | Tab | ↑/↓ | ←/→");
+
+        f.render_widget(navigation.alignment(Alignment::Right), area);
+        f.render_widget(shortcuts.alignment(Alignment::Left), area);
     }
 
     pub fn render_calendar(f: &mut Frame<impl Backend>, area: Rect) {
-        let block = Block::default()
-            .title(" Calendar ")
-            .title_alignment(Alignment::Left)
-            .borders(Borders::ALL)
-            .border_type(BorderType::Rounded);
-        f.render_widget(block, area);
-
-        let margin = Margin {
-            vertical: 1,
-            horizontal: 2,
-        };
+        DefaultView::render_vertical_separator(f, area);
         let calendar = CalendarWidget::from(Local::now());
-        f.render_widget(calendar, area.inner(&margin));
+        f.render_widget(calendar, area);
     }
 
     fn make_content(task: &Task) -> Spans {
-        if task.is_done {
-            Spans::from(vec![
-                Span::styled("✔ ", Style::default()),
-                Span::styled(
-                    task.name.clone(),
-                    Style::default().add_modifier(Modifier::CROSSED_OUT),
-                ),
-            ])
-        } else {
-            Spans::from(vec![Span::raw("  "), Span::raw(task.name.clone())])
-        }
+        let style = match task.is_done {
+            true => Style::default().add_modifier(Modifier::CROSSED_OUT),
+            false => Style::default(),
+        };
+        Spans::from(Span::styled(task.name.clone(), style))
     }
 
     pub fn render_tasks(
@@ -74,17 +47,31 @@ impl DefaultView {
             .map(|task| ListItem::new(Self::make_content(task)))
             .collect();
 
-        let block = Block::default()
-            .title(" Tasks ")
-            .title_alignment(Alignment::Left)
-            .borders(Borders::ALL)
-            .border_type(BorderType::Rounded);
-
         let list = List::new(items)
-            .block(block)
             .highlight_style(Style::default().bg(Color::White).fg(Color::Black))
-            .highlight_symbol(" >> ");
-        f.render_stateful_widget(list, area, &mut ui.tasks)
+            .highlight_symbol("* ");
+
+        f.render_stateful_widget(list, area, &mut ui.tasks);
+    }
+
+    pub fn render_horizontal_separator(f: &mut Frame<impl Backend>, area: Rect) {
+        let area = Rect {
+            x: 1,
+            y: area.y.saturating_sub(1),
+            width: area.width + 2,
+            height: 1,
+        };
+        f.render_widget(Block::default().borders(Borders::TOP), area);
+    }
+
+    pub fn render_vertical_separator(f: &mut Frame<impl Backend>, area: Rect) {
+        let area = Rect {
+            x: area.x.saturating_sub(1),
+            y: 1,
+            width: 1,
+            height: area.height,
+        };
+        f.render_widget(Block::default().borders(Borders::LEFT), area);
     }
 
     pub fn render_main(f: &mut Frame<impl Backend>, area: Rect) {

@@ -24,7 +24,7 @@ impl Widget for CalendarWidget {
         let bounds = self.widget_bounds(4, 2);
         if area.width < bounds.width || area.height < bounds.height {
             return; // TODO: figure out what to do when area is to small
-        }
+        };
         area = self.align_area(area, bounds);
         let [header, arrows, weekdays, rest] = self.layout(area);
 
@@ -97,10 +97,7 @@ impl CalendarWidget {
         let padd = (area.width - bounds.width) / 2;
         area.width = bounds.width;
         area.x += padd;
-
-        let padd = (area.height - bounds.height) / 2;
         area.height = bounds.height;
-        area.y += padd;
         area
     }
 
