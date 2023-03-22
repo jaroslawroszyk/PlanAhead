@@ -1,11 +1,9 @@
 mod add_task_handler;
 mod default_handler;
-mod edit_task_handler;
 mod prompt_handler;
 
 pub use add_task_handler::*;
 pub use default_handler::*;
-pub use edit_task_handler::*;
 pub use prompt_handler::*;
 
 use crate::{

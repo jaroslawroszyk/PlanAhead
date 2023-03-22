@@ -4,7 +4,7 @@ use crate::{
 };
 use tui::backend::Backend;
 
-#[derive(Default, Clone, Copy)]
+#[derive(Default, Clone, Copy, PartialEq, Eq)]
 pub enum State {
     #[default]
     Default,
@@ -26,7 +26,7 @@ impl State {
     pub fn event_handler(&self) -> Box<dyn EventHandler> {
         match self {
             State::AddTask => Box::new(AddTaskEventHandler) as Box<dyn EventHandler>,
-            State::EditTask => Box::new(EditTaskEventHandler) as Box<dyn EventHandler>,
+            State::EditTask => Box::new(AddTaskEventHandler) as Box<dyn EventHandler>,
             State::Default => Box::new(DefaultEventHandler) as Box<dyn EventHandler>,
             State::Prompt => Box::new(PromptEventHandler) as Box<dyn EventHandler>,
         }
