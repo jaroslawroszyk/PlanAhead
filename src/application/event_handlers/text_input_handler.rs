@@ -1,7 +1,7 @@
 use super::*;
 
-pub struct AddTaskEventHandler;
-impl EventHandler for AddTaskEventHandler {
+pub struct TextInputHandler;
+impl EventHandler for TextInputHandler {
     fn on_key_press(&self, key: KeyEvent, app: &mut App, ui: &mut StatefulUi) {
         match key.code {
             KeyCode::Enter => {
@@ -11,9 +11,9 @@ impl EventHandler for AddTaskEventHandler {
                 ui.cursor_offset = 0;
             }
             KeyCode::Backspace => {
-                let idx = app.input.len().saturating_sub(ui.cursor_offset + 1);
-                if idx < app.input.len() {
-                    app.input.remove(idx);
+                let idx = app.input.len().saturating_sub(ui.cursor_offset);
+                if idx > 0 && idx <= app.input.len() {
+                    app.input.remove(idx - 1);
                 }
             }
             KeyCode::Esc => {
@@ -32,7 +32,7 @@ impl EventHandler for AddTaskEventHandler {
     }
 }
 
-impl AddTaskEventHandler {
+impl TextInputHandler {
     fn finish_action(&self, app: &mut App, ui: &mut StatefulUi) {
         match app.state {
             State::AddTask => app.add_task(),

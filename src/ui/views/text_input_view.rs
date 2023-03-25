@@ -1,7 +1,7 @@
 use super::*;
 
-pub struct TaskInputView;
-impl<B: Backend> View<B> for TaskInputView {
+pub struct TextInputView;
+impl<B: Backend> View<B> for TextInputView {
     fn post_render(&self, f: &mut Frame<B>, app: &App, ui: &mut StatefulUi) {
         let layout = ViewLayout::new(f.size());
         if let Some(footer) = layout.footer {
@@ -11,7 +11,7 @@ impl<B: Backend> View<B> for TaskInputView {
     }
 }
 
-impl TaskInputView {
+impl TextInputView {
     fn render_footer(f: &mut Frame<impl Backend>, area: Rect, text: &str, ui: &mut StatefulUi) {
         let indicator = ">> ";
         let len = indicator.len() + text.len().saturating_sub(ui.cursor_offset);
