@@ -1,4 +1,4 @@
-use chrono::{Local, NaiveDate, Days};
+use chrono::{Days, Local, NaiveDate};
 use tui::widgets::ListState;
 
 pub struct StatefulUi {
