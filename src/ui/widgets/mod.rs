@@ -4,7 +4,7 @@ pub mod day;
 pub use calendar::*;
 pub use day::*;
 
-use chrono::{DateTime, Datelike, Local, NaiveDate};
+use chrono::{Datelike, Local, NaiveDate};
 use itertools::Itertools;
 use tui::{
     buffer::Buffer,

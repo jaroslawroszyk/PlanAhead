@@ -2,6 +2,7 @@ use crate::{
     application::{State, Task},
     backend::db,
 };
+use chrono::{Local, NaiveDate};
 use std::str::FromStr;
 
 #[derive(PartialEq)]
@@ -15,6 +16,7 @@ pub struct App {
     pub state: State,
     pub input: String,
     pub previous_action: Option<Action>,
+    pub date: NaiveDate,
 }
 
 impl Default for App {
@@ -25,6 +27,7 @@ impl Default for App {
             state: State::Default,
             input: String::default(),
             previous_action: None,
+            date: Local::now().date_naive(),
         }
     }
 }
@@ -75,5 +78,9 @@ impl App {
             let current_task = &mut self.tasks[idx];
             current_task.toogle_status();
         }
+    }
+
+    pub fn set_date(&mut self, date: NaiveDate) {
+        self.date = date;
     }
 }

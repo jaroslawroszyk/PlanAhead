@@ -1,18 +1,19 @@
+mod calendar_view;
 mod default_view;
 mod layout;
 mod prompt_view;
-mod task_input_view;
+mod text_input_view;
 
+pub use calendar_view::*;
 pub use default_view::*;
 pub use layout::*;
 pub use prompt_view::*;
-pub use task_input_view::*;
+pub use text_input_view::*;
 
 use crate::{
     application::{App, Task},
     ui::{views::ViewLayout, CalendarWidget, StatefulUi},
 };
-use chrono::Local;
 use tui::{
     backend::Backend,
     layout::{Alignment, Constraint, Direction, Layout, Rect},
@@ -28,7 +29,7 @@ pub trait View<B: Backend> {
         DefaultView::render_tasks(f, layout.tasks, &app.tasks, ui);
 
         if let Some(calendar) = layout.calendar {
-            DefaultView::render_calendar(f, calendar);
+            DefaultView::render_calendar(f, calendar, ui);
         }
         if let Some(footer) = layout.footer {
             DefaultView::render_footer(f, footer);

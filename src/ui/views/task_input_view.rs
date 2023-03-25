@@ -7,6 +7,9 @@ impl<B: Backend> View<B> for TaskInputView {
         if let Some(footer) = layout.footer {
             ViewLayout::clear(f, footer);
             Self::render_footer(f, footer, &app.input);
+
+            let borders = layout.with_borders();
+            DefaultView::highligh_area(f, borders.footer.unwrap());
         }
     }
 }

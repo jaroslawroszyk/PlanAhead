@@ -1,7 +1,12 @@
 use super::*;
 
 pub struct DefaultView;
-impl<B: Backend> View<B> for DefaultView {}
+impl<B: Backend> View<B> for DefaultView {
+    fn post_render(&self, f: &mut Frame<B>, _: &App, _: &mut StatefulUi) {
+        let layout = ViewLayout::new(f.size()).with_borders();
+        Self::highligh_area(f, layout.tasks);
+    }
+}
 
 impl DefaultView {
     pub fn render_footer(f: &mut Frame<impl Backend>, area: Rect) {
@@ -22,9 +27,21 @@ impl DefaultView {
         f.render_widget(shortcuts.alignment(Alignment::Left), area);
     }
 
-    pub fn render_calendar(f: &mut Frame<impl Backend>, area: Rect) {
+    pub fn highligh_area(f: &mut Frame<impl Backend>, area: Rect) {
+        let highlight = Block::default()
+            .borders(Borders::ALL)
+            .border_type(BorderType::Thick);
+        f.render_widget(highlight, area);
+
+        let app_title = Block::default()
+            .title(" PlanAhead ")
+            .title_alignment(Alignment::Center);
+        f.render_widget(app_title, f.size());
+    }
+
+    pub fn render_calendar(f: &mut Frame<impl Backend>, area: Rect, ui: &StatefulUi) {
         DefaultView::render_vertical_separator(f, area);
-        let calendar = CalendarWidget::from(Local::now());
+        let calendar = CalendarWidget::from(ui.date);
         f.render_widget(calendar, area);
     }
 

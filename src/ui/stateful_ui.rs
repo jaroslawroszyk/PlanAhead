@@ -1,8 +1,20 @@
+use chrono::{Local, NaiveDate, Days};
 use tui::widgets::ListState;
 
-#[derive(Default)]
 pub struct StatefulUi {
     pub tasks: ListState,
+    pub cursor_offset: usize,
+    pub date: NaiveDate,
+}
+
+impl Default for StatefulUi {
+    fn default() -> Self {
+        StatefulUi {
+            tasks: ListState::default(),
+            cursor_offset: 0,
+            date: Local::now().date_naive(),
+        }
+    }
 }
 
 impl StatefulUi {
@@ -32,5 +44,25 @@ impl StatefulUi {
 
     pub fn selected_task(&self) -> Option<usize> {
         self.tasks.selected()
+    }
+
+    pub fn next_day(&mut self) {
+        self.date = self.date.succ_opt().unwrap()
+    }
+
+    pub fn previous_day(&mut self) {
+        self.date = self.date.pred_opt().unwrap();
+    }
+
+    pub fn next_week(&mut self) {
+        self.date = self.date.checked_add_days(Days::new(7)).unwrap();
+    }
+
+    pub fn previous_week(&mut self) {
+        self.date = self.date.checked_sub_days(Days::new(7)).unwrap();
+    }
+
+    pub fn set_date(&mut self, date: NaiveDate) {
+        self.date = date;
     }
 }
