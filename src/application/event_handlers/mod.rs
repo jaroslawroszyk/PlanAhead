@@ -1,7 +1,9 @@
+mod calendar_handler;
 mod default_handler;
 mod prompt_handler;
 mod text_input_handler;
 
+pub use calendar_handler::*;
 pub use default_handler::*;
 pub use prompt_handler::*;
 pub use text_input_handler::*;

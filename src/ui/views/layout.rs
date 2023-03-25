@@ -53,4 +53,35 @@ impl ViewLayout {
         let text = vec![Spans::from(Span::styled(" ".repeat(w), Style::reset())); h];
         f.render_widget(Paragraph::new(text), area);
     }
+
+    pub fn with_borders(mut self) -> ViewLayout {
+        let (mw, mh) = (2, 1); // (margin   width, margin  height)
+        let (pw, ph) = (1, 1); // (margin   width, margin  height)
+
+        self.tasks = Rect {
+            x: self.tasks.x - mw,
+            y: self.tasks.y - mh,
+            width: self.tasks.width + 2 * mw,
+            height: self.tasks.height + 2 * mh,
+        };
+
+        if let Some(calendar) = &mut self.calendar {
+            *calendar = Rect {
+                x: calendar.x - pw,
+                y: calendar.y - ph,
+                width: calendar.width + 2 * pw,
+                height: calendar.height + 2 * ph,
+            };
+        }
+
+        if let Some(footer) = &mut self.footer {
+            *footer = Rect {
+                x: footer.x - mw,
+                y: footer.y - mh,
+                width: footer.width + 2 * mw,
+                height: footer.height + 2 * mh,
+            };
+        }
+        self
+    }
 }

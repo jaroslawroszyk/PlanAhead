@@ -136,8 +136,8 @@ impl CalendarWidget {
     }
 }
 
-impl From<DateTime<Local>> for CalendarWidget {
-    fn from(date: DateTime<Local>) -> Self {
+impl From<NaiveDate> for CalendarWidget {
+    fn from(date: NaiveDate) -> Self {
         CalendarWidget {
             year: date.year(),
             month: date.month(),
