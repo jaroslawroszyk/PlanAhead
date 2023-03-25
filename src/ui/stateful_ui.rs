@@ -3,6 +3,7 @@ use tui::widgets::ListState;
 #[derive(Default)]
 pub struct StatefulUi {
     pub tasks: ListState,
+    pub cursor_offset: usize,
 }
 
 impl StatefulUi {

@@ -1,12 +1,12 @@
 mod default_view;
 mod layout;
 mod prompt_view;
-mod task_input_view;
+mod text_input_view;
 
 pub use default_view::*;
 pub use layout::*;
 pub use prompt_view::*;
-pub use task_input_view::*;
+pub use text_input_view::*;
 
 use crate::{
     application::{App, Task},
