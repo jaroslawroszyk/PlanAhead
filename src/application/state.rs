@@ -1,6 +1,6 @@
 use crate::{
     application::event_handlers::*,
-    ui::{DefaultView, PromptView, TextInputView, View},
+    ui::{CalendarView, DefaultView, PromptView, TextInputView, View},
 };
 use tui::backend::Backend;
 
@@ -11,6 +11,7 @@ pub enum State {
     AddTask,
     EditTask,
     Prompt,
+    Calendar,
 }
 
 impl State {
@@ -20,6 +21,7 @@ impl State {
             State::EditTask => Box::new(TextInputView) as Box<dyn View<B>>,
             State::Default => Box::new(DefaultView) as Box<dyn View<B>>,
             State::Prompt => Box::new(PromptView) as Box<dyn View<B>>,
+            State::Calendar => Box::new(CalendarView) as Box<dyn View<B>>,
         }
     }
 
@@ -29,6 +31,7 @@ impl State {
             State::EditTask => Box::new(TextInputHandler) as Box<dyn EventHandler>,
             State::Default => Box::new(DefaultEventHandler) as Box<dyn EventHandler>,
             State::Prompt => Box::new(PromptEventHandler) as Box<dyn EventHandler>,
+            State::Calendar => Box::new(CalendarEventHandler) as Box<dyn EventHandler>,
         }
     }
 }
